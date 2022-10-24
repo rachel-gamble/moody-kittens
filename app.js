@@ -1,4 +1,5 @@
 let kittens = []
+console.log(kittens);
 /**
  * Called when submitting the new Kitten Form
  * This method will pull data from the form
@@ -7,6 +8,18 @@ let kittens = []
  * Then reset the form
  */
 function addKitten(event) {
+  event.preventDefault();
+  let form = event.target
+
+  let kitten = {
+    id: generateId(),
+    name: form.name.value,
+    affection: 5,
+    mood: "tolerant"
+  }
+  kittens.push(kitten);
+  saveKittens();
+  form.reset();
 }
 
 /**
@@ -14,6 +27,8 @@ function addKitten(event) {
  * Saves the string to localstorage at the key kittens 
  */
 function saveKittens() {
+  window.localStorage.setItem("kittens", JSON.stringify(kittens))
+  drawKittens()
 }
 
 /**
@@ -22,12 +37,22 @@ function saveKittens() {
  * the kittens array to the retrieved array
  */
 function loadKittens() {
+  let savedKittens = JSON.parse(window.localStorage.getItem("kittens"))
+  if (savedKittens) {
+    kittens = savedKittens
+  }
+  drawKittens(); // I might try only drawing after clicking get started
+
 }
+
 
 /**
  * Draw all of the kittens to the kittens element
  */
 function drawKittens() {
+  let template = "";
+  kittens.forEach(i => template += drawKitten(i))
+  document.getElementById("kittens").innerHTML = template
 }
 
 
@@ -37,6 +62,7 @@ function drawKittens() {
  * @return {Kitten}
  */
 function findKittenById(id) {
+  return kittens.find(i => i.id == id)
 }
 
 
@@ -49,6 +75,11 @@ function findKittenById(id) {
  * @param {string} id 
  */
 function pet(id) {
+  let kitten = findKittenById(id)
+  let n = Math.random() > .65 ? 1 : -1
+  kitten.affection += n
+  setKittenMood(kitten)
+  saveKittens()
 }
 
 /**
@@ -58,6 +89,11 @@ function pet(id) {
  * @param {string} id
  */
 function catnip(id) {
+
+  let kitten = findKittenById(id)
+  kitten.affection = 5
+  setKittenMood(kitten)
+  saveKittens()
 }
 
 /**
@@ -65,13 +101,70 @@ function catnip(id) {
  * @param {Kitten} kitten 
  */
 function setKittenMood(kitten) {
+  if (kitten.affection >= 6) {
+    kitten.mood = 'happy'
+  }
+  if (kitten.affection <= 5) {
+    kitten.mood = 'tolerant'
+  }
+  if (kitten.affection < 3) {
+    kitten.mood = 'angry'
+  }
+  if (kitten.affection <= 0) {
+    kitten.mood = 'vanished'
+  }
+
+}
+
+function drawKitten(kitten) {
+  if (kitten.affection <= 0) {
+    return `
+    <div class="kitten ${kitten.mood} card text-light bg-dark p-3 m-1">
+      <div class="text-center mb-1">
+        <img src="//robohash.org/${kitten.name}?set=set4" alt="" height="140">
+      </div>
+      <div>
+        <b>Name:</b>
+        <span>${kitten.name}</span>
+      </div>
+      <div>
+        <b>Ran Away!</b>
+      </div>
+    </div> 
+    `
+  }
+  return `
+   <div class="kitten ${kitten.mood} card text-light bg-dark p-3 m-1">
+   <div class="text-center mb-1">
+     <img src="//robohash.org/${kitten.name}?set=set4" alt="" height="120">
+   </div>
+   <div>
+     <b>Name:</b>
+     <span>${kitten.name}</span>
+   </div>
+   <div>
+     <b>Mood:</b>
+     <span>${kitten.mood}</span>
+   </div>
+   <div>
+     <b>Affection:</b>
+     <span>${kitten.affection}</span>
+   </div>
+   <div class="d-flex align-items-center space-between mt-1">
+     <button class="btn-cancel" onclick="pet('${kitten.id}')">Pet</button>
+     <button onclick="catnip('${kitten.id}')">Catnip</button>
+   </div>
+ </div>`
+
 }
 
 /**
  * Removes all of the kittens from the array
  * remember to save this change
  */
-function clearKittens(){
+function clearKittens() {
+  kittens = []
+  saveKittens()
 }
 
 /**
@@ -80,7 +173,7 @@ function clearKittens(){
  */
 function getStarted() {
   document.getElementById("welcome").remove();
-  console.log('Good Luck, Take it away')
+  //window.sessionStorage.setItem('welcome') Might try saving element's removed state during user session
 }
 
 

@@ -14,9 +14,13 @@
 <body>
   <header class="bg-dark d-flex align-items-center p-1 space-between">
     <img src="moody-logo.png" height="60" alt="Moody Kittens">
+    <div>
+      <button id="clear" onclick="clearKittens()">Delete Kittens</button>
+    </div>
     <form class="" onsubmit="addKitten(event)">
       <div class="d-flex">
         <input placeholder="Name" type="text" name="name" />
+
         <button class="btn-special" type="submit">
           /ᐠ｡ꞈ｡ᐟ\
         </button>
@@ -28,8 +32,10 @@
       <div class="card p-2 text-center w-50">
         <img src="moody-logo.png" height="250" alt="Moody Kittens">
         <div class="mt-2">
-          <b class="text-center">Hello Student</b>
-          <p>This is your starter template only feel free to modify the look as you tackle the challenges that we have laid out.</p>
+          <b class="text-center">Hello</b>
+          <p>Name a kitten, and then pet him or her. If you overdo it
+            the cat may not be pleased. Catnip will reset its mood.
+          </p>
           <small>Good Luck and Have Fun!</small>
           <br>
           <button onclick="getStarted()">Get Started</button>
@@ -37,11 +43,31 @@
       </div>
     </div>
     <div class="p-2">
+
       <div id="kittens" class="d-flex align-items-center flex-wrap">
+        <div class="kitten card text-light bg-dark p-3 m-1" hidden>
+          <div class="text-center mb-1">
+            <img src="//robohash.org/${kitten.name}?set=set4" alt="" height="120">
+          </div>
+          <div>
+            <b>Name:</b>
+            <span></span>
+          </div>
+          <div>
+            <b>Mood:</b>
+            <span></span>
+          </div>
+          <div>
+            <b>Ran Away!</b>
+          </div>
+        </div>
       </div>
+
+
   </main>
   <footer class="card bg-dark text-light p-2 d-flex align-items-center justify-content-center">
     <small>Created with <span style="color: var(--primary)">&hearts;</span> by CodeWorks</small>
+
   </footer>
 
   <script src="app.js"></script>
