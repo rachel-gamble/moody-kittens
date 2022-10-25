@@ -9,6 +9,7 @@ console.log(kittens);
  */
 function addKitten(event) {
   event.preventDefault();
+
   let form = event.target
 
   let kitten = {
@@ -17,9 +18,16 @@ function addKitten(event) {
     affection: 5,
     mood: "tolerant"
   }
+  if (form.name.value == "") { alert("You must enter a new name") }
+
+  else {
+
+  }
+
   kittens.push(kitten);
   saveKittens();
   form.reset();
+  drawKittens()
 }
 
 /**
@@ -41,7 +49,7 @@ function loadKittens() {
   if (savedKittens) {
     kittens = savedKittens
   }
-  drawKittens(); // I might try only drawing after clicking get started
+  drawKittens(); // I might try only drawing after clicking get started. later~ It took me 30 minutes, but the cats load right away now!
 
 }
 
@@ -50,6 +58,7 @@ function loadKittens() {
  * Draw all of the kittens to the kittens element
  */
 function drawKittens() {
+  loadKittens()
   let template = "";
   kittens.forEach(i => template += drawKitten(i))
   document.getElementById("kittens").innerHTML = template
